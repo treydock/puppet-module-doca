@@ -7,7 +7,8 @@ describe 'doca class' do
     it 'runs successfully' do
       pp = <<-PP
         class { 'doca':
-          manage_service => false,
+          openibd_service_ensure => 'stopped',
+          openibd_service_enable => false,
         }
       PP
 
