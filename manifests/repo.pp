@@ -24,7 +24,7 @@ class doca::repo {
           descr    => 'DOCA Online Repo',
           baseurl  => $repo_baseurl,
           enabled  => '1',
-          gpgkey   => $doca::repo_gpgkey,
+          gpgkey   => $repo_gpgkey,
           gpgcheck => $doca::repo_gpgcheck,
           exclude  => $doca::repo_exclude,
           priority => $doca::repo_priority,

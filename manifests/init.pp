@@ -10,6 +10,8 @@
 #   DOCA version to install
 # @param manage_repo
 #   Boolean to set if DOCA repo should be managed
+# @param manage_repo_dependency
+#   Manage dependency repos
 # @param repo_baseurl
 #   The baseurl of the yumrepo resource
 # @param repo_gpgcheck
@@ -22,6 +24,8 @@
 #   The priority of the yumrepo resource
 # @param manage_packages
 #   Boolean to determine if packages should be managed
+# @param package_dependencies
+#   Packages needed to install DOCA
 # @param package_ensure
 #   The package ensure property
 # @param package_name
@@ -50,12 +54,14 @@
 class doca (
   String[1] $version = '3.5.0',
   Boolean $manage_repo = true,
+  Boolean $manage_repo_dependency = true,
   Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $repo_baseurl = undef,
   Enum['1','0'] $repo_gpgcheck = '1',
   Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl, Stdlib::Filesource]] $repo_gpgkey = undef,
   Optional[String] $repo_exclude = undef,
   Optional[String] $repo_priority = undef,
   Boolean $manage_packages = true,
+  Array $package_dependencies = ['dkms', 'gcc', 'make', 'perl', 'mokutil'],
   String $package_ensure = 'present',
   String $package_name = 'doca-ofed',
   Array $extra_packages = [],
@@ -73,6 +79,11 @@ class doca (
     $openib_shellvar_notify = Service['openibd']
   } else {
     $openib_shellvar_notify = undef
+  }
+
+  if $manage_repo_dependency and $facts['os']['family'] == 'RedHat' {
+    include epel
+    Class['epel'] -> Class['doca::install']
   }
 
   contain doca::repo

@@ -10,11 +10,11 @@ fixtures:
       repo: puppet/augeasproviders_shellvar
     systemd:
       repo: puppet/systemd
-    rsyslog:
-      repo: saz/rsyslog
     network:
       repo: puppet/network
     filemapper:
       repo: puppet/filemapper
+    epel:
+      repo: puppet/epel
   symlinks:
     mofed: "#{source_dir}"
