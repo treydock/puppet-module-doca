@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'mofed::opensm' do
+describe 'doca::opensm' do
   on_supported_os.each do |os, facts|
     context "when #{os}" do
       let(:facts) do
@@ -11,12 +11,12 @@ describe 'mofed::opensm' do
 
       it { is_expected.to compile.with_all_deps }
 
-      it { is_expected.to create_class('mofed::opensm') }
-      it { is_expected.to contain_class('mofed') }
+      it { is_expected.to create_class('doca::opensm') }
+      it { is_expected.to contain_class('doca') }
 
       it do
         is_expected.to contain_package('opensm').with(ensure: 'present',
-                                                      require: 'Class[Mofed::Repo]',)
+                                                      require: 'Class[Doca::Repo]',)
       end
 
       it do
@@ -70,26 +70,24 @@ describe 'mofed::opensm' do
                                                          require: 'Package[opensm]',)
         end
 
-        if facts[:operatingsystemrelease].to_i >= 7.0
-          it do
-            is_expected.to contain_systemd__unit_file('opensmd@.service').with_ensure('present')
-          end
+        it do
+          is_expected.to contain_systemd__unit_file('opensmd@.service').with_ensure('present')
+        end
 
-          it do
-            is_expected.to contain_service('opensmd@1').with(ensure: 'running',
-                                                             enable: 'true',
-                                                             hasstatus: 'true',
-                                                             hasrestart: 'true',
-                                                             subscribe: ['File[/etc/sysconfig/opensm]', 'Systemd::Unit_file[opensmd@.service]'],)
-          end
+        it do
+          is_expected.to contain_service('opensmd@1').with(ensure: 'running',
+                                                           enable: 'true',
+                                                           hasstatus: 'true',
+                                                           hasrestart: 'true',
+                                                           subscribe: ['File[/etc/sysconfig/opensm]', 'Systemd::Unit_file[opensmd@.service]'],)
+        end
 
-          it do
-            is_expected.to contain_service('opensmd@2').with(ensure: 'running',
-                                                             enable: 'true',
-                                                             hasstatus: 'true',
-                                                             hasrestart: 'true',
-                                                             subscribe: ['File[/etc/sysconfig/opensm]', 'Systemd::Unit_file[opensmd@.service]'],)
-          end
+        it do
+          is_expected.to contain_service('opensmd@2').with(ensure: 'running',
+                                                           enable: 'true',
+                                                           hasstatus: 'true',
+                                                           hasrestart: 'true',
+                                                           subscribe: ['File[/etc/sysconfig/opensm]', 'Systemd::Unit_file[opensmd@.service]'],)
         end
       end
 
@@ -114,12 +112,10 @@ describe 'mofed::opensm' do
           it { is_expected.to contain_service('opensmd').with_ensure('stopped') }
           it { is_expected.to contain_service('opensmd').with_enable('false') }
 
-          if facts[:operatingsystemrelease].to_i >= 7.0
-            it { is_expected.to contain_service('opensmd@1').with_ensure('stopped') }
-            it { is_expected.to contain_service('opensmd@1').with_enable('false') }
-            it { is_expected.to contain_service('opensmd@2').with_ensure('stopped') }
-            it { is_expected.to contain_service('opensmd@2').with_enable('false') }
-          end
+          it { is_expected.to contain_service('opensmd@1').with_ensure('stopped') }
+          it { is_expected.to contain_service('opensmd@1').with_enable('false') }
+          it { is_expected.to contain_service('opensmd@2').with_ensure('stopped') }
+          it { is_expected.to contain_service('opensmd@2').with_enable('false') }
         end
       end
 
@@ -143,13 +139,11 @@ describe 'mofed::opensm' do
 
           it { is_expected.to compile.with_all_deps }
 
-          if facts[:operatingsystemrelease].to_i >= 7.0
-            it { is_expected.to contain_systemd__unit_file('opensmd@.service').with_ensure('absent') }
-            it { is_expected.to contain_service('opensmd@1').with_ensure('stopped') }
-            it { is_expected.to contain_service('opensmd@1').with_enable('false') }
-            it { is_expected.to contain_service('opensmd@2').with_ensure('stopped') }
-            it { is_expected.to contain_service('opensmd@2').with_enable('false') }
-          end
+          it { is_expected.to contain_systemd__unit_file('opensmd@.service').with_ensure('absent') }
+          it { is_expected.to contain_service('opensmd@1').with_ensure('stopped') }
+          it { is_expected.to contain_service('opensmd@1').with_enable('false') }
+          it { is_expected.to contain_service('opensmd@2').with_ensure('stopped') }
+          it { is_expected.to contain_service('opensmd@2').with_enable('false') }
         end
       end
     end

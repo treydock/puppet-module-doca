@@ -16,10 +16,13 @@ HOSTS:
       - LANG=en_US.UTF-8
       - LANGUAGE=en_US.UTF-8
       - LC_ALL=en_US.UTF-8
-    docker_container_name: 'mofed-el8'
+    docker_container_name: 'doca-el8'
 CONFIG:
   log_level: debug
   type: foss
+  docker_options:
+    write_timeout: 600
+    read_timeout: 600
 ssh:
   password: root
   auth_methods: ["password"]

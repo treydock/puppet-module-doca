@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'mofed::interface' do
+describe 'doca::interface' do
   on_supported_os.each do |os, facts|
     context "when #{os}" do
       let(:facts) do
@@ -24,14 +24,6 @@ describe 'mofed::interface' do
         default_params
       end
 
-      let :nm_controlled do
-        if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'].to_s == '7'
-          { 'NM_CONTROLLED' => 'no' }
-        else
-          {}
-        end
-      end
-
       it do
         is_expected.to contain_network_config('ib0').with(
           ensure: 'present',
@@ -44,7 +36,7 @@ describe 'mofed::interface' do
           options: {
             'TYPE' => 'Infiniband',
             'CONNECTED_MODE' => 'yes',
-          }.merge(nm_controlled),
+          },
         )
       end
 
@@ -67,7 +59,7 @@ describe 'mofed::interface' do
           default_params.merge(connected_mode: 'no')
         end
 
-        it { is_expected.to contain_network_config('ib0').with_options({ 'TYPE' => 'Infiniband', 'CONNECTED_MODE' => 'no' }.merge(nm_controlled)) }
+        it { is_expected.to contain_network_config('ib0').with_options({ 'TYPE' => 'Infiniband', 'CONNECTED_MODE' => 'no' }) }
       end
 
       context 'when mtu => 65520' do
@@ -83,7 +75,7 @@ describe 'mofed::interface' do
           default_params.merge(gateway: '192.168.1.254')
         end
 
-        it { is_expected.to contain_network_config('ib0').with_options({ 'TYPE' => 'Infiniband', 'GATEWAY' => '192.168.1.254', 'CONNECTED_MODE' => 'yes' }.merge(nm_controlled)) }
+        it { is_expected.to contain_network_config('ib0').with_options({ 'TYPE' => 'Infiniband', 'GATEWAY' => '192.168.1.254', 'CONNECTED_MODE' => 'yes' }) }
       end
 
       context 'when bonding => true' do
@@ -107,7 +99,7 @@ describe 'mofed::interface' do
               'MASTER' => 'ibbond0',
               'SLAVE' => 'yes',
               'CONNECTED_MODE' => 'yes',
-            }.merge(nm_controlled),
+            },
           )
         end
 
@@ -123,7 +115,7 @@ describe 'mofed::interface' do
               'MASTER' => 'ibbond0',
               'SLAVE' => 'yes',
               'CONNECTED_MODE' => 'yes',
-            }.merge(nm_controlled),
+            },
           )
         end
 
@@ -139,7 +131,7 @@ describe 'mofed::interface' do
               'BONDING_MASTER' => 'yes',
               'BONDING_OPTS' => 'mode=active-backup miimon=100',
               'CONNECTED_MODE' => 'yes',
-            }.merge(nm_controlled),
+            },
           )
         end
       end

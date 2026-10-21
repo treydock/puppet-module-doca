@@ -1,16 +1,14 @@
 # frozen_string_literal: true
 
-# Class for Mellanox Infiniband fact functions
-class Facter::Util::MellanoxInfiniband
+# Class for Nvidia Infiniband fact functions
+class Facter::Util::NvidiaInfiniband
+  LSPCI_IB_PCI_REGEX = %r{\[15b3:}.freeze
   LSPCI_IB_REGEX = %r{(Network|Infiniband) controller: Mellanox Technologies}.freeze
 
   # lspci is a delegating helper method intended to make it easier to stub the
-  # system call without affecting other calls to Facter::Core::Execution.exec
+  # system call without affecting other calls to Facter::Core::Execution.execute
   def self.lspci(command = 'lspci 2>/dev/null')
-    # TODO: Deprecated in facter-2.0
-    Facter::Util::Resolution.exec command
-    # TODO: Not supported in facter < 2.0
-    # Facter::Core::Execution.exec command
+    Facter::Core::Execution.execute(command)
   end
 
   # Returns the number of InfiniBand interfaces found
@@ -21,8 +19,12 @@ class Facter::Util::MellanoxInfiniband
   # @api private
   def self.count_ib_devices
     count = 0
-    if Facter::Util::Resolution.which('lspci')
+    if Facter::Core::Execution.which('lspci')
       output = lspci
+      matches = output.scan(LSPCI_IB_PCI_REGEX)
+      count = matches.flatten.reject { |s| s.nil? }.length
+      return count if count.positive?
+
       matches = output.scan(LSPCI_IB_REGEX)
       count = matches.flatten.reject { |s| s.nil? }.length
     end

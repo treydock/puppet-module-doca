@@ -1,7 +1,7 @@
 # @summary Manage OpenSM
 #
 # @example Manage OpenSM on two specific ports
-#   class { 'mofed::opensm':
+#   class { 'doca::opensm':
 #     ports => ['mlx4_1 1', 'mlx4_1 2'],
 #   }
 #
@@ -14,12 +14,12 @@
 # @param sweep
 #   Value passsed to opensm `-s` argument.
 #
-class mofed::opensm (
+class doca::opensm (
   Enum['present', 'absent', 'disabled'] $ensure = 'present',
   Array $ports = [],
   Integer $sweep = 10,
 ) {
-  include mofed
+  include doca
 
   case $ensure {
     'present': {
@@ -50,7 +50,7 @@ class mofed::opensm (
 
   package { 'opensm':
     ensure  => $package_ensure,
-    require => Class['mofed::repo'],
+    require => Class['doca::repo'],
   }
 
   # Template uses:
@@ -61,7 +61,7 @@ class mofed::opensm (
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => template('mofed/opensm/opensm.sysconfig.erb'),
+    content => template('doca/opensm/opensm.sysconfig.erb'),
     require => Package['opensm'],
   }
 
@@ -86,7 +86,7 @@ class mofed::opensm (
 
     systemd::unit_file { 'opensmd@.service':
       ensure => $unit_ensure,
-      source => 'puppet:///modules/mofed/opensm/opensmd@.service',
+      source => 'puppet:///modules/doca/opensm/opensmd@.service',
     }
 
     $ports.each |Integer $index, String $port| {

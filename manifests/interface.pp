@@ -1,7 +1,7 @@
 # @summary Manage IPoIB interface
 #
 # @example Add IPoIB interface
-#   mofed::interface { 'ib0':
+#   doca::interface { 'ib0':
 #     ensure         => 'present',
 #     ipaddr         => '10.0.0.1',
 #     netmask        => '255.255.0.0',
@@ -31,7 +31,7 @@
 # @param bonding_opts
 #   The bonding options to use for this bonding interface
 #
-define mofed::interface (
+define doca::interface (
   Enum['present', 'absent'] $ensure = 'present',
   Optional[Stdlib::IP::Address] $ipaddr = undef,
   Optional[Stdlib::IP::Address] $netmask = undef ,
@@ -53,13 +53,7 @@ define mofed::interface (
     }
   }
 
-  include mofed
-
-  if $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '7') == 0 {
-    $_nm_controlled = pick($nm_controlled, 'no')
-  } else {
-    $_nm_controlled = $nm_controlled
-  }
+  include doca
 
   if $bonding {
     if empty($bonding_slaves) {
@@ -79,7 +73,7 @@ define mofed::interface (
           'MASTER'         => $name,
           'SLAVE'          => 'yes',
           'CONNECTED_MODE' => $connected_mode,
-          'NM_CONTROLLED'  => $_nm_controlled,
+          'NM_CONTROLLED'  => $nm_controlled,
         }.filter |$k, $v| { $v =~ NotUndef },
       }
     }
@@ -99,7 +93,7 @@ define mofed::interface (
         'BONDING_OPTS'   => $bonding_opts,
         'GATEWAY'        => $gateway,
         'CONNECTED_MODE' => $connected_mode,
-        'NM_CONTROLLED'  => $_nm_controlled,
+        'NM_CONTROLLED'  => $nm_controlled,
       }.filter |$k, $v| { $v =~ NotUndef },
     }
   } else {
@@ -115,7 +109,7 @@ define mofed::interface (
         'TYPE'           => 'Infiniband',
         'GATEWAY'        => $gateway,
         'CONNECTED_MODE' => $connected_mode,
-        'NM_CONTROLLED'  => $_nm_controlled,
+        'NM_CONTROLLED'  => $nm_controlled,
       }.filter |$k, $v| { $v =~ NotUndef },
     }
   }
