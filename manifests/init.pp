@@ -22,6 +22,8 @@
 #   The exclude of the yumrepo resource
 # @param repo_priority
 #   The priority of the yumrepo resource
+# @param cleanup_mofed
+#   Cleanup mofed module resources
 # @param manage_packages
 #   Boolean to determine if packages should be managed
 # @param package_dependencies
@@ -60,6 +62,7 @@ class doca (
   Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl, Stdlib::Filesource]] $repo_gpgkey = undef,
   Optional[String] $repo_exclude = undef,
   Optional[String] $repo_priority = undef,
+  Boolean $cleanup_mofed = true,
   Boolean $manage_packages = true,
   Array $package_dependencies = ['dkms', 'gcc', 'make', 'perl', 'mokutil'],
   String $package_ensure = 'present',

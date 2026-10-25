@@ -29,6 +29,14 @@ class doca::repo {
           exclude  => $doca::repo_exclude,
           priority => $doca::repo_priority,
         }
+        if $doca::cleanup_mofed {
+          yumrepo { 'mlnx_ofed':
+            ensure => 'absent',
+          }
+          -> file { '/etc/yum.repos.d/mlnx_ofed.repo':
+            ensure => 'absent',
+          }
+        }
       }
       default: {
         # Do nothing
