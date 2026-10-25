@@ -6,6 +6,8 @@
         - el9
       puppet:
         - puppet8
+Rakefile:
+  changelog_since_tag: v6.0.0
 .gitlab-ci.yml:
   delete: true
 appveyor.yml:
