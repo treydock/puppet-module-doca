@@ -1,7 +1,7 @@
-# puppet-module-mofed
+# puppet-module-doca
 
-[![Puppet Forge](http://img.shields.io/puppetforge/v/treydock/mofed.svg)](https://forge.puppetlabs.com/treydock/mofed)
-[![CI Status](https://github.com/treydock/puppet-module-mofed/workflows/CI/badge.svg?branch=master)](https://github.com/treydock/puppet-module-mofed/actions?query=workflow%3ACI)
+[![Puppet Forge](http://img.shields.io/puppetforge/v/treydock/doca.svg)](https://forge.puppetlabs.com/treydock/doca)
+[![CI Status](https://github.com/treydock/puppet-module-doca/workflows/CI/badge.svg?branch=main)](https://github.com/treydock/puppet-module-doca/actions?query=workflow%3ACI)
 
 #### Table of Contents
 
@@ -10,75 +10,80 @@
 3. [Reference - Parameter and detailed reference to all options](#reference)
     * [Facts](#facts)
 4. [Limitations - OS compatibility, etc.](#limitations)
-5. [Development - Guide for contributing to the module](#development)
-6. [TODO](#todo)
-7. [Additional Information](#additional-information)
 
 ## Overview
 
-The MOFED Puppet module manages Mellanox OFED for Linux.
+The DOCA Puppet module manages NVIDIA DOCA for Linux.
 
 ## Usage
 
-### mofed
+### doca
 
-Install and configure MOFED from site specific yum repo server.
+Install a specific version of DOCA:
 
-    class { 'mofed':
-      repo_baseurl => 'http://example.com/mlnx/$releasever/3.4-2.0.0.0-rhel7.3/'
-      repo_gpgkey  => 'http://example.com/mlnx/$releasever/3.4-2.0.0.0-rhel7.3/RPM-GPG-KEY-Mellanox',
-    }
+```puppet
+class { 'doca':
+  version => '3.2.2',
+}
+```
 
-### mofed::interface
+Install and configure DOCA from site specific yum repo server.
+
+```puppet
+class { 'doca':
+  repo_baseurl => "http://example.com/doca/3.5.0_rhel${facts['os']['release']['major']}"
+  repo_gpgkey  => "http://example.com/doca/3.5.0_rhel${facts['os']['release']['major']}/RPM-GPG-KEY-doca",
+}
+```
+
+### doca::interface
 
 Add IPoIB interface
 
-    mofed::interface { 'ib0':
-      ensure         => 'present',
-      ipaddr         => '10.0.0.1',
-      netmask        => '255.255.0.0',
-      connected_mode => 'no',
-    }
+```puppet
+doca::interface { 'ib0':
+  ensure         => 'present',
+  ipaddr         => '10.0.0.1',
+  netmask        => '255.255.0.0',
+  connected_mode => 'no',
+}
+```
 
 The same interface can be defined in Hiera if the mofed class is included
 
-    mofed::interfaces:
-      ib0:
-        ensure: 'present'
-        ipaddr: '10.0.0.1'
-        netmask: '255.255.0.0'
-        connected_mode: 'no'    
+```yaml
+doca::interfaces:
+  ib0:
+    ensure: 'present'
+    ipaddr: '10.0.0.1'
+    netmask: '255.255.0.0'
+    connected_mode: 'no'
+```
 
-### mofed::opensm
+### doca::opensm
 
 Add opensm that is set for 2 ports.
 
-    class { 'mofed::opensm':
-      ports => ['mlx4_1 1', 'mlx4_1 2'],
-    }
-
-### mofed::srp
-
-Add srp for 2 ports.
-
-    class { 'mofed::srp':
-      ports => ['mlx4_1 1', 'mlx4_1 2'],
-    }
+```puppet
+class { 'doca::opensm':
+  ports => ['mlx4_1 1', 'mlx4_1 2'],
+}
+```
 
 
 ## Reference
 
-[http://treydock.github.io/puppet-module-mofed/](http://treydock.github.io/puppet-module-mofed/)
+[http://treydock.github.io/puppet-module-doca/](http://treydock.github.io/puppet-module-doca/)
 
 ### Facts
 
-#### has\_mellanox\_infiniband
+#### has\_nvidia\_infiniband
 
-This boolean fact will return `true` if the system has a Mellanox Infiniband card.
+This boolean fact will return `true` if the system has a NVIDIA Infiniband card.
 
-#### mellanox\_ofed\_version
+#### nvidia\_ofed\_version
 
-Returns the Mellanox OFED version that is installed
+Returns the NVIDIA OFED version that is installed
 
 #### infiniband\_hcas
 
@@ -92,31 +97,5 @@ Moved to [treydock/infiniband](https://forge.puppetlabs.com/treydock/infiniband)
 
 This module has been tested on:
 
-* RedHat 7 x86_64
-
-## Development
-
-### Testing
-
-Testing requires the following dependencies:
-
-* rake
-* bundler
-
-Install gem dependencies
-
-    bundle install
-
-Run unit tests
-
-    bundle exec rake test
-
-If you have Vagrant >= 1.2.0 installed you can run system tests
-
-    bundle exec rake beaker
-
-## TODO
-
-## Further Information
-
-*
+* RedHat 8 x86_64
+* RedHat 9 x86_64
