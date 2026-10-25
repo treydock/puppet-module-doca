@@ -1,14 +1,12 @@
 # @api private
-class mofed::service {
+class doca::service {
   assert_private()
 
-  if $mofed::manage_service {
+  if $doca::manage_service {
     service { 'openibd':
-      ensure     => $mofed::openibd_service_ensure,
-      enable     => $mofed::openibd_service_enable,
-      name       => $mofed::openibd_service_name,
-      hasstatus  => $mofed::openibd_service_hasstatus,
-      hasrestart => $mofed::openibd_service_hasrestart,
+      ensure => $doca::openibd_service_ensure,
+      enable => $doca::openibd_service_enable,
+      name   => $doca::openibd_service_name,
     }
   }
 }

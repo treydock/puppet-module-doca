@@ -1,32 +1,32 @@
 {
-  "name": "treydock-mofed",
+  "name": "treydock-doca",
   "version": "5.0.3",
   "author": "treydock",
-  "summary": "Mellanox OFED Puppet module",
+  "summary": "NVIDIA DOCA Puppet module",
   "license": "Apache-2.0",
-  "source": "git://github.com/treydock/puppet-module-mofed.git",
-  "project_page": "https://github.com/treydock/puppet-module-mofed",
-  "issues_url": "https://github.com/treydock/puppet-module-mofed/issues",
+  "source": "git://github.com/treydock/puppet-module-doca.git",
+  "project_page": "https://github.com/treydock/puppet-module-doca",
+  "issues_url": "https://github.com/treydock/puppet-module-doca/issues",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 9.0.0 <10.0.0"
+      "version_requirement": ">= 9.0.0 <11.0.0"
     },
     {
       "name": "puppet/augeasproviders_shellvar",
-      "version_requirement": ">= 5.0.0 <7.0.0"
+      "version_requirement": ">= 5.0.0 <8.0.0"
     },
     {
       "name": "puppet/systemd",
-      "version_requirement": ">= 0.3.0 <8.0.0"
-    },
-    {
-      "name": "saz/rsyslog",
-      "version_requirement": ">= 3.5.0 <6.0.0"
+      "version_requirement": ">= 0.3.0 <11.0.0"
     },
     {
       "name": "puppet/network",
       "version_requirement": ">= 2.1.0 <4.0.0"
+    },
+    {
+      "name": "puppet/epel",
+      "version_requirement": ">= 5.0.0 <7.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -55,16 +55,17 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 7.0.0 < 9.0.0"
+      "version_requirement": ">= 8.0.0 < 9.0.0"
     }
   ],
   "tags": [
     "mellanox",
+    "nvidia",
     "ofed",
     "infiniband",
     "hpc"
   ],
-  "pdk-version": "2.7.1",
+  "pdk-version": "3.4.0",
   "template-url": "https://github.com/treydock/pdk-templates.git#master",
-  "template-ref": "heads/master-0-gd2de99e"
+  "template-ref": "heads/master-0-g771671b"
 }

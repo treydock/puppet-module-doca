@@ -1,0 +1,7 @@
+---
+doca::package_dependencies:
+  - dkms
+  - gcc
+  - make
+  - perl
+  - mokutil

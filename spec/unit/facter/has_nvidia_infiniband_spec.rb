@@ -1,0 +1,27 @@
+# frozen_string_literal: true
+
+require 'spec_helper'
+require 'facter/util/nvidia_infiniband'
+
+describe 'has_nvidia_infiniband fact' do
+  before :each do
+    Facter.clear
+    allow(Facter.fact(:kernel)).to receive(:value).and_return('Linux')
+    allow(Facter::Core::Execution).to receive(:which).and_return('/sbin/lspci')
+  end
+
+  it 'returns true when Nvidia ConnectX card' do
+    allow(Facter::Util::NvidiaInfiniband).to receive(:lspci).and_return(my_fixture_read('mellanox_lspci_1'))
+    expect(Facter.fact(:has_nvidia_infiniband).value).to eq(true)
+  end
+
+  it 'returns true when Nvidia ConnectX-3 card' do
+    allow(Facter::Util::NvidiaInfiniband).to receive(:lspci).and_return(my_fixture_read('mellanox_lspci_2'))
+    expect(Facter.fact(:has_nvidia_infiniband).value).to eq(true)
+  end
+
+  it 'returns false when no IB device present' do
+    allow(Facter::Util::NvidiaInfiniband).to receive(:lspci).and_return(my_fixture_read('noib_lspci_1'))
+    expect(Facter.fact(:has_nvidia_infiniband).value).to eq(false)
+  end
+end

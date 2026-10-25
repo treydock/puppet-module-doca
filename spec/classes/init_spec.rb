@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'mofed' do
+describe 'doca' do
   on_supported_os.each do |os, facts|
     context "when #{os}" do
       let(:facts) do
@@ -11,30 +11,27 @@ describe 'mofed' do
 
       it { is_expected.to compile.with_all_deps }
 
-      it { is_expected.to create_class('mofed') }
+      it { is_expected.to create_class('doca') }
 
-      it { is_expected.to contain_class('mofed::repo').that_comes_before('Class[mofed::install]') }
-      it { is_expected.to contain_class('mofed::install').that_comes_before('Class[mofed::config]') }
-      it { is_expected.to contain_class('mofed::config').that_comes_before('Class[mofed::service]') }
-      it { is_expected.to contain_class('mofed::service') }
+      it { is_expected.to contain_class('doca::repo').that_comes_before('Class[doca::install]') }
+      it { is_expected.to contain_class('doca::install').that_comes_before('Class[doca::config]') }
+      it { is_expected.to contain_class('doca::config').that_comes_before('Class[doca::service]') }
+      it { is_expected.to contain_class('doca::service') }
 
-      describe 'mofed::install' do
+      describe 'doca::install' do
         it do
-          is_expected.to contain_package('mlnx-ofed').only_with(
+          is_expected.to contain_package('doca-ofed').only_with(
             ensure: 'present',
-            name: 'mlnx-ofed-basic',
           )
         end
       end
 
-      describe 'mofed::service' do
+      describe 'doca::service' do
         it do
           is_expected.to contain_service('openibd').only_with(
             ensure: 'running',
             enable: 'true',
             name: 'openibd',
-            hasstatus: 'true',
-            hasrestart: 'true',
           )
         end
       end
